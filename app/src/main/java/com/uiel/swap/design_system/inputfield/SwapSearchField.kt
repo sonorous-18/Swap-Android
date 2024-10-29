@@ -36,15 +36,6 @@ object SwapSearchField {
         onClear: (() -> Unit)? = null
     ) {
         Column(modifier = modifier) {
-            label?.let {
-                Text(
-                    text = it,
-                    style = SwapTypography.LabelMedium,
-                    color = if (isActive) SwapColor.gray900 else SwapColor.gray800,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
-
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
@@ -136,7 +127,7 @@ fun SwapSearchFieldPreview() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SwapSearchField.Search(
-            value = "Search input",
+            value = "",
             onValueChange = {},
             label = "Search",
             isActive = true,
@@ -144,7 +135,7 @@ fun SwapSearchFieldPreview() {
         )
 
         SwapSearchField.Search(
-            value = "",
+            value = "Input-filled",
             onValueChange = {},
             label = "Search",
             placeholder = "Enter search term",
@@ -152,7 +143,7 @@ fun SwapSearchFieldPreview() {
         )
 
         SwapSearchField.Search(
-            value = "Error search",
+            value = "Input-filled",
             onValueChange = {},
             label = "Search",
             isError = true,
@@ -160,7 +151,7 @@ fun SwapSearchFieldPreview() {
         )
 
         SwapSearchField.Search(
-            value = "Disabled search",
+            value = "Input-filled",
             onValueChange = {},
             label = "Search",
             enabled = false
