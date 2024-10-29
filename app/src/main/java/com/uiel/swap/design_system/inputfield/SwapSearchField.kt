@@ -1,4 +1,4 @@
-package com.uiel.swap.design_system.textfield
+package com.uiel.swap.design_system.inputfield
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,18 +10,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.draw.clip
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
 
-object SwapNumberField {
+object SwapSearchField {
     @Composable
-    fun Number(
+    fun Search(
         value: String,
         onValueChange: (String) -> Unit,
         modifier: Modifier = Modifier,
@@ -30,7 +32,8 @@ object SwapNumberField {
         placeholder: String? = null,
         isError: Boolean = false,
         interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-        isActive: Boolean = false
+        isActive: Boolean = false,
+        onClear: (() -> Unit)? = null
     ) {
         Column(modifier = modifier) {
             label?.let {
@@ -44,18 +47,13 @@ object SwapNumberField {
 
             BasicTextField(
                 value = value,
-                onValueChange = {
-                    if (it.all { char -> char.isDigit() || char == ',' }) {
-                        onValueChange(it)
-                    }
-                },
+                onValueChange = onValueChange,
                 enabled = enabled,
                 textStyle = SwapTypography.BodyLarge.copy(
-                    color = if (!enabled) SwapColor.gray450 else SwapColor.gray900,
-                    textAlign = TextAlign.End
+                    color = if (!enabled) SwapColor.gray450 else SwapColor.gray900
                 ),
                 cursorBrush = SolidColor(SwapColor.main500),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
                 interactionSource = interactionSource,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,11 +76,8 @@ object SwapNumberField {
                         shape = RoundedCornerShape(8.dp)
                     ),
                 decorationBox = { innerTextField ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.End // Align everything to the end
+                    Box(
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         if (value.isEmpty() && placeholder != null) {
                             Text(
@@ -90,15 +85,42 @@ object SwapNumberField {
                                 style = SwapTypography.BodyLarge,
                                 color = SwapColor.gray450
                             )
-                        } else {
-                            innerTextField()
                         }
-                        Spacer(modifier = Modifier.width(4.dp)) // Add some space between the value and "원"
-                        Text(
-                            text = "원",
-                            style = SwapTypography.BodyLarge,
-                            color = if (!enabled) SwapColor.gray450 else SwapColor.gray900
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Box(modifier = Modifier.weight(1f)) {
+                                innerTextField()
+                            }
+                            Row {
+                                if (onClear != null && value.isNotEmpty()) {
+                                    IconButton(
+                                        onClick = {
+                                            onClear()
+                                            onValueChange("")
+                                        },
+                                        modifier = Modifier.size(20.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Clear,
+                                            contentDescription = "Clear",
+                                            tint = SwapColor.gray450
+                                        )
+                                    }
+                                }
+                                IconButton(
+                                    onClick = {},
+                                    modifier = Modifier.size(20.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search",
+                                        tint = SwapColor.gray450
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             )
@@ -108,37 +130,39 @@ object SwapNumberField {
 
 @Preview(showBackground = true)
 @Composable
-fun SwapNumberFieldPreview() {
+fun SwapSearchFieldPreview() {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        SwapNumberField.Number(
+        SwapSearchField.Search(
+            value = "Search input",
+            onValueChange = {},
+            label = "Search",
+            isActive = true,
+            onClear = {}
+        )
+
+        SwapSearchField.Search(
             value = "",
             onValueChange = {},
-            label = "title",
-            placeholder = "0",
-            isActive = true
+            label = "Search",
+            placeholder = "Enter search term",
+            isError = false
         )
 
-        SwapNumberField.Number(
-            value = "1,000",
+        SwapSearchField.Search(
+            value = "Error search",
             onValueChange = {},
-            label = "title",
-            isActive = true
+            label = "Search",
+            isError = true,
+            placeholder = "Invalid input"
         )
 
-        SwapNumberField.Number(
-            value = "1,000",
+        SwapSearchField.Search(
+            value = "Disabled search",
             onValueChange = {},
-            label = "title",
-            isError = true
-        )
-
-        SwapNumberField.Number(
-            value = "1,000",
-            onValueChange = {},
-            label = "title",
+            label = "Search",
             enabled = false
         )
     }

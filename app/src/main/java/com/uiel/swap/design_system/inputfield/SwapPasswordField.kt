@@ -1,4 +1,4 @@
-package com.uiel.swap.design_system.textfield
+package com.uiel.swap.design_system.inputfield
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
