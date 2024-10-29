@@ -44,7 +44,7 @@ fun SplashScreen(onTimeout: () -> Unit) {
             )
 
             Image(
-                painter = painterResource(id = R.drawable.splash_swap_logo),
+                painter = painterResource(id = R.drawable.splash_swap_character),
                 contentDescription = "splash swap logo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
