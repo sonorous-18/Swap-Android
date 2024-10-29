@@ -54,31 +54,3 @@ fun SplashScreen(onTimeout: () -> Unit) {
         }
     }
 }
-
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .background(Color.White)  // 흰색 배경 추가
-//    ) {
-//        // "SWAP" 텍스트 - 더 위쪽으로 배치하고 검은색으로 변경
-//        Text(
-//            text = "SWAP",
-//            style = TextStyle(
-//                fontSize = 48.sp,
-//                fontWeight = FontWeight.Black,  // 더 굵은 폰트 웨이트
-//                color = Color.Black  // 검은색으로 변경
-//            ),
-//            modifier = Modifier
-//                .align(Alignment.TopCenter)
-//                .padding(top = 80.dp)  // 상단 여백 증가
-//        )
-//
-//        // 하단 로고 이미지
-//        Image(
-//            painter = painterResource(id = R.drawable.splash_swap_logo),
-//            contentDescription = "splash swap logo",
-//            modifier = Modifier
-//                .align(Alignment.BottomCenter)
-//                .padding(bottom = 100.dp)  // 하단 여백 추가
-//        )
-//    }
