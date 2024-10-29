@@ -149,9 +149,9 @@ fun SwapPasswordFieldPreview() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SwapPasswordField.Password(
-            value = "password123",
+            value = "password",
             onValueChange = {},
-            label = "Password",
+            label = "title",
             isActive = true,
             onClear = {}
         )
@@ -159,30 +159,30 @@ fun SwapPasswordFieldPreview() {
         SwapPasswordField.Password(
             value = "",
             onValueChange = {},
-            label = "Password",
-            placeholder = "Enter your password",
+            label = "title",
+            placeholder = "비밀번호를 입력하세요",
             isError = false
         )
 
         SwapPasswordField.Password(
-            value = "wrong_password",
+            value = "password",
             onValueChange = {},
-            label = "Password",
+            label = "title",
             isError = true,
             placeholder = "Invalid password"
         )
 
         SwapPasswordField.Password(
-            value = "password123",
+            value = "password",
             onValueChange = {},
-            label = "Password",
+            label = "title",
             enabled = false
         )
 
         SwapPasswordField.Password(
-            value = "password123",
+            value = "password",
             onValueChange = {},
-            label = "Password",
+            label = "title",
             isActive = true,
             onClear = {}
         )
