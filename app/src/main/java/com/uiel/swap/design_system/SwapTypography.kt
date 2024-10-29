@@ -6,6 +6,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.uiel.swap.R
 
@@ -38,7 +39,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 64.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val DisplayMedium
@@ -48,7 +49,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 52.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val DisplaySmall
@@ -58,7 +59,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 44.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val HeadlineLarge
@@ -68,7 +69,7 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 40.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val HeadlineMedium
@@ -78,7 +79,7 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 36.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val HeadlineSmall
@@ -88,7 +89,7 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 32.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val TitleLarge
@@ -98,7 +99,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 28.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val TitleMedium
@@ -108,7 +109,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 24.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val TitleSmall
@@ -118,7 +119,7 @@ object SwapTypography {
             fontWeight = FontWeight.SemiBold,
             lineHeight = 20.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val BodyLarge
@@ -128,7 +129,7 @@ object SwapTypography {
             fontWeight = FontWeight.Normal,
             lineHeight = 24.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val BodyMedium
@@ -138,7 +139,7 @@ object SwapTypography {
             fontWeight = FontWeight.Normal,
             lineHeight = 20.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val BodySmall
@@ -148,7 +149,7 @@ object SwapTypography {
             fontWeight = FontWeight.Normal,
             lineHeight = 16.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val LabelLarge
@@ -158,7 +159,7 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 20.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val LabelMedium
@@ -168,7 +169,7 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 16.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 
     val LabelSmall
@@ -178,6 +179,6 @@ object SwapTypography {
             fontWeight = FontWeight.Medium,
             lineHeight = 16.sp,
             platformStyle = platFormTextStyle,
-            letterSpacing = (-1.5).sp
+            letterSpacing = (-0.015).em
         )
 }
