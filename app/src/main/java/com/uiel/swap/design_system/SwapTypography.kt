@@ -1,6 +1,7 @@
 package com.uiel.swap.design_system
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -25,6 +26,13 @@ private val PretendardFamily = FontFamily(
             weight = FontWeight.SemiBold,
         ),
     ),
+)
+
+private val RixInooAriDuriFamily = FontFamily(
+    Font(
+        resId = R.font.rixinooariduri_pro_regular,
+        weight = FontWeight.Normal
+    )
 )
 
 private val platFormTextStyle = PlatformTextStyle(
@@ -180,5 +188,15 @@ object SwapTypography {
             lineHeight = 16.sp,
             platformStyle = platFormTextStyle,
             letterSpacing = (-0.015).em
+        )
+
+    val SplashTitle
+        @Composable get() = TextStyle(
+            fontFamily = RixInooAriDuriFamily,
+            fontSize = 48.sp,
+            color = Color(0xFF8256EA),
+            fontWeight = FontWeight.Normal,
+            lineHeight = 72.sp,
+            platformStyle = platFormTextStyle,
         )
 }
