@@ -13,6 +13,10 @@
         android:theme="@style/Theme.Swap"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD3OfV_ywCGOyXNjovIIZbZtleZlqvjFRU"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
