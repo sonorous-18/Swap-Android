@@ -89,17 +89,15 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .background(
-                        if (selectedTabIndex == 0) SwapColor.main500 else Color.Transparent
-                    )
+                    .clickable { selectedTabIndex = 0 }
+                    .background(if (selectedTabIndex == 0) SwapColor.main500 else Color.Transparent)
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "서비스 포인트",
                     color = if (selectedTabIndex == 0) Color.White else Color.DarkGray,
-                    style = SwapTypography.TitleMedium,
-                    modifier = Modifier.clickable { selectedTabIndex = 0 }
+                    style = SwapTypography.TitleMedium
                 )
             }
 
@@ -107,20 +105,18 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .background(
-                        if (selectedTabIndex == 1) SwapColor.main500 else Color.Transparent
-                    )
+                    .clickable {
+                        selectedTabIndex = 1
+                        onExternalPointClick()
+                    }
+                    .background(if (selectedTabIndex == 1) SwapColor.main500 else Color.Transparent)
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "외부 포인트",
                     color = if (selectedTabIndex == 1) Color.White else Color.DarkGray,
-                    style = SwapTypography.TitleMedium,
-                    modifier = Modifier.clickable {
-                        selectedTabIndex = 1
-                        onExternalPointClick()
-                    }
+                    style = SwapTypography.TitleMedium
                 )
             }
         }
