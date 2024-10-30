@@ -1,5 +1,6 @@
 package com.uiel.swap.ui.home
 
+import android.widget.GridLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,7 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uiel.swap.design_system.SwapColor
@@ -204,7 +209,6 @@ private fun Content(
             }
             Spacer(modifier = Modifier.width(8.dp))
         }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -255,6 +259,18 @@ private fun Content(
                 onClick = { },
             )
         }
+        VerticalGrid(
+            modifier = Modifier
+                .padding(top = 28.dp)
+                .padding(horizontal = 18.dp),
+        ) {
+            for(i in 1..15) {
+                Product(
+                    title = "자이언트 에스케이프 디스크 2 하이브리드",
+                    price = "월 15,000원 ~"
+                )
+            }
+        }
     }
 }
 
@@ -291,21 +307,75 @@ private fun Product(
 ) {
     Box(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(6.dp)
             .background(
                 shape = RoundedCornerShape(16.dp),
                 color = SwapColor.gray0,
-            ),
+            )
+            .padding(16.dp),
         contentAlignment = Alignment.TopCenter,
     ) {
-        SwapText(
-            text = title,
-            style = SwapTypography.BodyMedium
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SwapText(
+                text = title,
+                style = SwapTypography.BodyMedium,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            SwapText(
+                text = price,
+                style = SwapTypography.BodySmall,
+                color = SwapColor.gray600,
+            )
+            //Image(painter = painterResource(id = R.drawable.bi), contentDescription = )
+        }
+    }
+}
+
+@Composable
+fun VerticalGrid(
+    modifier: Modifier = Modifier,
+    columns: Int = 2,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        content = content,
+        modifier = modifier
+    ) { measurables, constraints ->
+        val itemWidth = constraints.maxWidth / columns
+        // Keep given height constraints, but set an exact width
+        val itemConstraints = constraints.copy(
+            minWidth = itemWidth,
+            maxWidth = itemWidth
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        SwapText(
-            text = price,
-            style = SwapTypography.BodySmall,
-        )
+        // Measure each item with these constraints
+        val placeables = measurables.map { it.measure(itemConstraints) }
+        // Track each columns height so we can calculate the overall height
+        val columnHeights = Array(columns) { 0 }
+        placeables.forEachIndexed { index, placeable ->
+            val column = index % columns
+            columnHeights[column] += placeable.height
+        }
+        val height = (columnHeights.maxOrNull() ?: constraints.minHeight)
+            .coerceAtMost(constraints.maxHeight)
+        layout(
+            width = constraints.maxWidth,
+            height = height
+        ) {
+            // Track the Y co-ord per column we have placed up to
+            val columnY = Array(columns) { 0 }
+            placeables.forEachIndexed { index, placeable ->
+                val column = index % columns
+                placeable.placeRelative(
+                    x = column * itemWidth,
+                    y = columnY[column]
+                )
+                columnY[column] += placeable.height
+            }
+        }
     }
 }
