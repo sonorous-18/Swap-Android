@@ -15,4 +15,5 @@ object SwapColor {
     val main500 = Color(0xFF683BD1)
     val main700 = Color(0xFF3E1D8B)
     val error = Color(0xFFDF454A)
+    val background = Color(0xFFF3EEE9)
 }
