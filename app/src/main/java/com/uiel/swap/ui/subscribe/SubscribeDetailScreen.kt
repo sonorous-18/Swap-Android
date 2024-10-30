@@ -1,19 +1,11 @@
 package com.uiel.swap.ui.subscribe
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,18 +15,32 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
 import com.uiel.swap.design_system.button.SwapColoredButton
+import com.uiel.swap.viewmodel.subscribe.SubscribeDetailViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun SubscribeDetailScreen() {
+fun SubscribeDetailScreen(
+    subscribeId: Long,
+    viewModel: SubscribeDetailViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getSubscribeDetail(subscribeId)
+    }
+
+    val selectedColor = remember { mutableStateOf(uiState.detail?.colors?.firstOrNull()) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +66,7 @@ fun SubscribeDetailScreen() {
                     )
                 }
                 Text(
-                    text = "Ace",
+                    text = uiState.detail?.title ?: "Ace",
                     style = SwapTypography.TitleLarge,
                     color = SwapColor.gray800
                 )
@@ -72,12 +78,9 @@ fun SubscribeDetailScreen() {
                     .height(300.dp)
                     .background(SwapColor.gray200)
             ) {
-                Text(
-                    text = "Image Carousel",
-                    modifier = Modifier.align(Alignment.Center),
-                    style = SwapTypography.BodyMedium,
-                    color = SwapColor.gray450
-                )
+                val thumbnailUrl = selectedColor.value?.thumbnail ?: ""
+                ThumbnailImage(thumbnailUrl)
+
                 Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
@@ -90,17 +93,33 @@ fun SubscribeDetailScreen() {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
+                        val colorName = ProductColor.fromName(selectedColor.value?.color ?: "")?.colorName ?: "Midnight Black"
                         Text(
-                            text = "Midnight Black",
+                            text = colorName,
                             style = SwapTypography.BodyLarge,
                             color = SwapColor.gray800
                         )
                         Spacer(modifier = Modifier.width(50.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(modifier = Modifier.size(24.dp).background(SwapColor.gray900, CircleShape))
-                            Box(modifier = Modifier.size(24.dp).background(SwapColor.gray600, CircleShape))
-                            Box(modifier = Modifier.size(24.dp).background(SwapColor.main300, CircleShape))
-                            Box(modifier = Modifier.size(24.dp).background(SwapColor.gray200, CircleShape))
+                            uiState.detail?.colors?.forEach { color ->
+                                val productColor = ProductColor.fromName(color.color)
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .background(
+                                            productColor?.colorValue ?: Color.Gray,
+                                            CircleShape
+                                        )
+                                        .border(
+                                            2.dp,
+                                            if (selectedColor.value?.id == color.id) SwapColor.main500 else Color.Transparent,
+                                            CircleShape
+                                        )
+                                        .clickable {
+                                            selectedColor.value = color
+                                        }
+                                )
+                            }
                         }
                     }
                 }
@@ -115,14 +134,14 @@ fun SubscribeDetailScreen() {
             ) {
                 Text(text = "어반바이크", style = SwapTypography.BodyLarge, color = SwapColor.gray600)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Ace", style = SwapTypography.HeadlineSmall, color = SwapColor.gray800)
+                Text(text = uiState.detail?.title ?: "Ace", style = SwapTypography.HeadlineSmall, color = SwapColor.gray800)
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = "월 구독료", style = SwapTypography.BodyMedium, color = SwapColor.gray600)
-                    Text(text = "15,000원", style = SwapTypography.TitleMedium, color = SwapColor.gray800)
+                    Text(text = "${uiState.detail?.price ?: 0}원", style = SwapTypography.TitleMedium, color = SwapColor.gray800)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -182,10 +201,13 @@ fun SubscribeDetailScreen() {
     }
 }
 
-
-
-@Preview(showBackground = true)
 @Composable
-fun SubscribeDetailScreenPreview() {
-    SubscribeDetailScreen()
+fun ThumbnailImage(thumbnailUrl: String) {
+    if (thumbnailUrl.isNotEmpty()) {
+        Image(
+            painter = rememberImagePainter(thumbnailUrl),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }

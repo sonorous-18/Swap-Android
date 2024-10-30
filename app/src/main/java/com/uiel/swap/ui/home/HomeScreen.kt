@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
@@ -44,7 +45,8 @@ import com.uiel.swap.viewmodel.home.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    navController: NavController
 ) {
     var showFilterSheet by remember { mutableStateOf(false) }
     var currentFilterType by remember { mutableStateOf(FilterType.COLOR) }
@@ -71,7 +73,8 @@ fun HomeScreen(
                     onFilterButtonClick = { filterType ->
                         currentFilterType = filterType
                         showFilterSheet = true
-                    }
+                    },
+                    navController = navController
                 )
             }
         }
@@ -159,7 +162,8 @@ private fun Banner(
 @Composable
 private fun Content(
     modifier: Modifier = Modifier,
-    onFilterButtonClick: (FilterType) -> Unit
+    onFilterButtonClick: (FilterType) -> Unit,
+    navController: NavController
 ) {
     Column(
         modifier = Modifier
@@ -255,7 +259,9 @@ private fun Content(
             for (i in 1..15) {
                 Product(
                     title = "자이언트 에스케이프 디스크 2 하이브리드",
-                    price = "월 15,000원 ~"
+                    price = "월 15,000원 ~",
+                    productId = 1,
+                    navController = navController
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -288,12 +294,17 @@ private fun Product(
     modifier: Modifier = Modifier,
     title: String,
     price: String,
+    productId: Long,
+    navController: NavController
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White)
+            .clickable {
+                navController.navigate("subscribeDetailScreen/$productId")
+            }
     ) {
         Box(
             modifier = Modifier
