@@ -2,6 +2,8 @@ package com.uiel.swap.design_system.button
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.uiel.swap.design_system.DURATION_MILLIS
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapText
+import com.uiel.swap.design_system.SwapTypography
 
 @Composable
 fun SwapOutlineButton(
@@ -52,12 +55,10 @@ fun SwapOutlineButton(
     )
 
     BasicButton(
-        modifier = modifier.border(
-            width = 1.dp,
-            color = background,
-        ),
+        modifier = modifier,
         backgroundColor = Color.Transparent,
         shape = RoundedCornerShape(8.dp),
+        borderStroke = BorderStroke(width = 1.dp, color = background),
         enabled = enabled,
         keyboardInteractionEnabled = keyboardInteractionEnabled,
         onPressed = { pressed = !pressed },
@@ -67,7 +68,7 @@ fun SwapOutlineButton(
                 modifier = if(small) {
                     Modifier.padding(
                         horizontal = 20.dp,
-                        vertical = 6.dp,
+                        vertical = 8.dp,
                     )
                 } else {
                     Modifier.padding(
@@ -76,7 +77,7 @@ fun SwapOutlineButton(
                     )
                 },
                 text = text,
-                style =,
+                style = SwapTypography.TitleMedium,
                 color = contentColor,
             )
         }

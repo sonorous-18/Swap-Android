@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.uiel.swap.design_system.DURATION_MILLIS
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapText
+import com.uiel.swap.design_system.SwapTypography
 
 @Composable
 fun SwapTextButton(
@@ -29,11 +30,11 @@ fun SwapTextButton(
 
     val contentColor by animateColorAsState(
         targetValue = if (!enabled) {
-            SwapColor.main500
+            SwapColor.gray450
         } else if (pressed) {
             SwapColor.main700
         } else {
-            SwapColor.gray450
+            SwapColor.main500
         },
         animationSpec = tween(durationMillis = DURATION_MILLIS),
         label = "",
@@ -61,7 +62,7 @@ fun SwapTextButton(
                     )
                 },
                 text = text,
-                style = ,
+                style = SwapTypography.TitleMedium,
                 color = contentColor,
             )
         }

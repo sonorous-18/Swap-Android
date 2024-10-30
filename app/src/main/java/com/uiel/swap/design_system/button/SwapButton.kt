@@ -3,6 +3,7 @@ package com.uiel.swap.design_system.button
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ internal fun BasicButton(
     modifier: Modifier,
     backgroundColor: Color,
     shape: RoundedCornerShape,
+    borderStroke: BorderStroke? = null,
     enabled: Boolean,
     keyboardInteractionEnabled: Boolean,
     onPressed: (pressed: Boolean) -> Unit,
@@ -62,9 +64,9 @@ internal fun BasicButton(
                 onPressed = onPressed,
                 onClick = onClick,
             )
-            //.padding(padding)
             .then(if (keyboardInteractionEnabled) Modifier.imePadding() else Modifier),
         shape = shapeByKeyboardShow,
+        border = borderStroke,
         color = backgroundColor,
         content = content,
         enabled = enabled,

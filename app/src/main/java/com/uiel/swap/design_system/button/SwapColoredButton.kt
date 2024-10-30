@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.uiel.swap.design_system.DURATION_MILLIS
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapText
+import com.uiel.swap.design_system.SwapTypography
 
 @Composable
 fun SwapColoredButton(
@@ -60,7 +61,7 @@ fun SwapColoredButton(
                 modifier = if (small) {
                     Modifier.padding(
                         horizontal = 20.dp,
-                        vertical = 6.dp,
+                        vertical = 8.dp,
                     )
                 } else {
                     Modifier.padding(
@@ -69,7 +70,7 @@ fun SwapColoredButton(
                     )
                 },
                 text = text,
-                style =,
+                style = SwapTypography.TitleMedium,
                 color = contentColor,
             )
         }
