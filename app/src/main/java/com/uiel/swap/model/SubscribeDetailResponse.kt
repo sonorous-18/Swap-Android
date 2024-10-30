@@ -11,5 +11,5 @@ data class SubscribeDetailResponse (
 data class SubscribeDetailColor(
     val id: Long,
     val thumbnail: String,
-    val color: Color,
+    val color: String,
 )

@@ -49,7 +49,7 @@ fun MyPageScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -98,7 +98,7 @@ fun MyPageScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)

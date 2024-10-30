@@ -8,6 +8,7 @@ import com.uiel.swap.ui.benefit.BenefitScreen
 import com.uiel.swap.ui.home.HomeScreen
 import com.uiel.swap.ui.map.MapScreen
 import com.uiel.swap.ui.mypage.MyPageScreen
+import com.uiel.swap.ui.subscribe.SubscribeDetailScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -16,7 +17,7 @@ fun Navigation(navController: NavHostController) {
         startDestination = BottomNavItem.Home.route
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(BottomNavItem.Map.route) {
             MapScreen()
@@ -26,6 +27,11 @@ fun Navigation(navController: NavHostController) {
         }
         composable(BottomNavItem.MyPage.route) {
             MyPageScreen()
+        }
+
+        composable("subscribeDetailScreen/{productId}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+            SubscribeDetailScreen(productId)
         }
     }
 }

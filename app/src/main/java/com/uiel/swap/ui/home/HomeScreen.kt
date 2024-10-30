@@ -5,10 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
@@ -46,7 +50,8 @@ import com.uiel.swap.viewmodel.home.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    navController: NavController
 ) {
     var showFilterSheet by remember { mutableStateOf(false) }
     var currentFilterType by remember { mutableStateOf(FilterType.COLOR) }
@@ -80,6 +85,7 @@ fun HomeScreen(
                         currentFilterType = filterType
                         showFilterSheet = true
                     },
+                    navController = navController,
                     subList = uiState.sub,
                 )
             }
@@ -172,6 +178,7 @@ private fun Banner(
 private fun Content(
     modifier: Modifier = Modifier,
     onFilterButtonClick: (FilterType) -> Unit,
+    navController: NavController,
     subList: List<SubscribeProductListResponse>,
 ) {
     Column(
@@ -182,24 +189,33 @@ private fun Content(
     ) {
         val bikeCategories = listOf("전체", "어반바이크", "킥스쿠터", "브랜드 콜라보", "자토바이", "로드바이크", "카고바이크")
         val selectedCategory = remember { mutableStateOf(0) }
+        val listState = rememberLazyListState()
 
-        Row(
+        LaunchedEffect(selectedCategory.value) {
+            listState.animateScrollToItem(selectedCategory.value)
+        }
+
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
-                .horizontalScroll(rememberScrollState()),
+                .padding(top = 16.dp),
+            state = listState,
+            contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Spacer(modifier = Modifier.width(8.dp))
-            bikeCategories.forEachIndexed { index, category ->
+            items(bikeCategories.size) { index ->
                 Column(
-                    modifier = Modifier.clickable(onClick = { selectedCategory.value = index }),
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { selectedCategory.value = index },
+                    ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     SwapText(
-                        text = category,
+                        text = bikeCategories[index],
                         style = if (selectedCategory.value == index) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
                         color = if (selectedCategory.value == index) Color.Black else SwapColor.gray600
                     )
@@ -214,7 +230,6 @@ private fun Content(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
         }
 
         Row(
@@ -255,7 +270,6 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .padding(horizontal = 24.dp),
-            //verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             subList.forEach {
                 Product(
@@ -263,8 +277,12 @@ private fun Content(
                     price = "월 ${it.price}원 ~",
                     img = it.thumbnail,
                     colors = it.colors,
+                    productId = it.id,
+                    navController = navController
                 )
+                Spacer(modifier = Modifier.height(12.dp))
             }
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
@@ -278,7 +296,11 @@ private fun FilterButton(
         modifier = Modifier
             .background(Color.White, RoundedCornerShape(50.dp))
             .padding(horizontal = 12.dp, vertical = 6.dp)
-            .clickable(onClick = onClick),
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ),
         text = text,
         style = SwapTypography.BodyMedium,
         color = SwapColor.gray800,
@@ -292,38 +314,43 @@ private fun Product(
     price: String,
     img: String,
     colors: List<com.uiel.swap.model.Color>,
+    productId: Long,
+    navController: NavController
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(150.dp)
             .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+            .clickable {
+                navController.navigate("subscribeDetailScreen/$productId")
+            }
     ) {
-
-        Image(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
-            painter = painterResource(id = R.drawable.ic_product_back),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-        )
+                .height(160.dp)
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .background(SwapColor.background)
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp),
+                painter = painterResource(id = R.drawable.ic_product_back),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        }
 
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    start = 16.dp,
-                    top = 16.dp,
-                    bottom = 16.dp,
-                ),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
-                modifier = Modifier
-                //.fillMaxHeight()
-            ) {
+            Column {
                 SwapText(
                     modifier = Modifier.widthIn(max = 180.dp),
                     text = title,
@@ -354,35 +381,25 @@ private fun Product(
                             com.uiel.swap.model.Color.PURPLE -> Color(0xFFA475DF)
                             com.uiel.swap.model.Color.BEIGE -> Color(0xFFFAE7BC)
                             com.uiel.swap.model.Color.SKY_BLUE -> Color(0xFF6CB1DF)
-                            com.uiel.swap.model.Color.WHITE -> Color(0xFFFFFFFF)
+                            com.uiel.swap.model.Color.WHITE -> Color.White
                         }
-                        if (it == com.uiel.swap.model.Color.WHITE) {
-                            Box(
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .border(1.dp, Color(0xFFE2E2E2), CircleShape)
-                                    .background(
-                                        shape = CircleShape,
-                                        color = color,
-                                    )
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .background(
-                                        shape = CircleShape,
-                                        color = color,
-                                    )
-                            )
-                        }
+                        Box(
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clip(CircleShape)
+                                .background(color)
+                                .border(
+                                    1.dp,
+                                    if (it == com.uiel.swap.model.Color.WHITE) Color(0xFFE2E2E2) else color,
+                                    CircleShape
+                                )
+                        )
                     }
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
             AsyncImage(
-                modifier = Modifier
-                    .size(140.dp),
+                modifier = Modifier.size(125.dp),
                 model = img,
                 contentDescription = null,
             )
