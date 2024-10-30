@@ -35,12 +35,18 @@ import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
 import com.uiel.swap.design_system.SwapText
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.ui.home.bottomsheet.FilterBottomSheet
+import com.uiel.swap.ui.home.bottomsheet.FilterType
 import com.uiel.swap.viewmodel.home.HomeViewModel
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var currentFilterType by remember { mutableStateOf(FilterType.COLOR) }
+    var selectedItems by remember { mutableStateOf(listOf<String>()) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,10 +64,25 @@ fun HomeScreen(
                     .fillMaxSize()
                     .background(SwapColor.main500)
             ) {
-                Content()
+                Content(
+                    onFilterButtonClick = { filterType ->
+                        currentFilterType = filterType
+                        showFilterSheet = true
+                    }
+                )
             }
         }
     }
+
+    FilterBottomSheet(
+        showSheet = showFilterSheet,
+        currentType = currentFilterType,
+        onTypeChange = { currentFilterType = it },
+        onDismiss = { showFilterSheet = false },
+        selectedItems = selectedItems,
+        onItemSelected = { selectedItems = selectedItems + it },
+        onItemDeselected = { selectedItems = selectedItems - it }
+    )
 }
 
 @Composable
@@ -134,7 +155,8 @@ private fun Banner(
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFilterButtonClick: (FilterType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -178,6 +200,7 @@ private fun Content(
             }
             Spacer(modifier = Modifier.width(8.dp))
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -205,10 +228,12 @@ private fun Content(
                     contentDescription = null,
                 )
             }
-            FilterButton(text = "컬러", onClick = {})
-            FilterButton(text = "가격대", onClick = {})
-            FilterButton(text = "기기 스펙", onClick = {})
+
+            FilterButton(text = "컬러") { onFilterButtonClick(FilterType.COLOR) }
+            FilterButton(text = "가격대") { onFilterButtonClick(FilterType.PRICE) }
+            FilterButton(text = "기기 스펙") { onFilterButtonClick(FilterType.SPEC) }
         }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
