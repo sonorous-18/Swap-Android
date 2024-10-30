@@ -27,9 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uiel.swap.R
@@ -37,12 +35,18 @@ import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
 import com.uiel.swap.design_system.SwapText
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.ui.home.bottomsheet.FilterBottomSheet
+import com.uiel.swap.ui.home.bottomsheet.FilterType
 import com.uiel.swap.viewmodel.home.HomeViewModel
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var currentFilterType by remember { mutableStateOf(FilterType.COLOR) }
+    var selectedItems by remember { mutableStateOf(listOf<String>()) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,10 +64,25 @@ fun HomeScreen(
                     .fillMaxSize()
                     .background(SwapColor.main500)
             ) {
-                Content()
+                Content(
+                    onFilterButtonClick = { filterType ->
+                        currentFilterType = filterType
+                        showFilterSheet = true
+                    }
+                )
             }
         }
     }
+
+    FilterBottomSheet(
+        showSheet = showFilterSheet,
+        currentType = currentFilterType,
+        onTypeChange = { currentFilterType = it },
+        onDismiss = { showFilterSheet = false },
+        selectedItems = selectedItems,
+        onItemSelected = { selectedItems = selectedItems + it },
+        onItemDeselected = { selectedItems = selectedItems - it }
+    )
 }
 
 @Composable
@@ -136,7 +155,8 @@ private fun Banner(
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFilterButtonClick: (FilterType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -180,6 +200,7 @@ private fun Content(
             }
             Spacer(modifier = Modifier.width(8.dp))
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -207,10 +228,12 @@ private fun Content(
                     contentDescription = null,
                 )
             }
-            FilterButton(text = "컬러", onClick = {})
-            FilterButton(text = "가격대", onClick = {})
-            FilterButton(text = "기기 스펙", onClick = {})
+
+            FilterButton(text = "컬러") { onFilterButtonClick(FilterType.COLOR) }
+            FilterButton(text = "가격대") { onFilterButtonClick(FilterType.PRICE) }
+            FilterButton(text = "기기 스펙") { onFilterButtonClick(FilterType.SPEC) }
         }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -251,27 +274,38 @@ private fun Product(
     price: String,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .background(Color.Red)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
     ) {
-        Image(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.ic_product_back),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-        )
+                .fillMaxWidth()
+                .height(160.dp)
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .background(SwapColor.background)
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp),
+                painter = painterResource(id = R.drawable.ic_product_back),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        }
+
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Cyan)
+                .fillMaxWidth()
                 .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 SwapText(
-                    modifier = Modifier.widthIn(max = 150.dp),
+                    modifier = Modifier.widthIn(max = 180.dp),
                     text = title,
                     style = SwapTypography.BodyMedium,
                     color = Color.Black,
@@ -305,6 +339,15 @@ private fun Product(
                     )
                 }
             }
+
+            Image(
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(start = 16.dp),
+                painter = painterResource(id = R.drawable.img_kickboard),
+                contentDescription = null,
+                contentScale = ContentScale.Fit
+            )
         }
     }
 }
