@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.uiel.swap.design_system.DURATION_MILLIS
 import com.uiel.swap.design_system.SwapColor
@@ -72,6 +73,7 @@ fun SwapColoredButton(
                 text = text,
                 style = SwapTypography.TitleMedium,
                 color = contentColor,
+                textAlign = TextAlign.Center,
             )
         }
     )
