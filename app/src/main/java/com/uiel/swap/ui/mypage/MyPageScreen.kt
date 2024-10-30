@@ -18,14 +18,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uiel.swap.R
+import com.uiel.swap.design_system.SwapColor
+import com.uiel.swap.design_system.SwapText
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.design_system.clickable
 
 @Composable
 fun MyPageScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF2EFEA))
+            .background(SwapColor.background)
     ) {
         Text(
             text = buildAnnotatedString {
@@ -37,7 +40,8 @@ fun MyPageScreen() {
                 }
             },
             style = SwapTypography.HeadlineLarge,
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(start = 28.dp, top = 32.dp, bottom = 20.dp),
+            color = Color.Black,
         )
 
         Card(
@@ -60,12 +64,13 @@ fun MyPageScreen() {
                         style = SwapTypography.HeadlineSmall.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
-                        )
+                        ),
+                        color = Color.Black,
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_right),
                         contentDescription = "더보기",
-                        tint = Color.Gray
+                        tint = SwapColor.gray300,
                     )
                 }
 
@@ -86,7 +91,7 @@ fun MyPageScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Card(
             modifier = Modifier
@@ -108,12 +113,13 @@ fun MyPageScreen() {
                         style = SwapTypography.TitleLarge.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
-                        )
+                        ),
+                        color = Color.Black,
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow_right),
                         contentDescription = "더보기",
-                        tint = Color.Gray
+                        tint = SwapColor.gray300,
                     )
                 }
 
@@ -129,59 +135,73 @@ fun MyPageScreen() {
 
                 Text(
                     text = "자이언트 에스케이프 디스크 2 하이브리드",
-                    style = SwapTypography.TitleMedium
+                    style = SwapTypography.TitleMedium,
+                    color = SwapColor.gray900,
                 )
 
                 Text(
                     text = "120일째 이용중",
                     style = SwapTypography.BodyMedium,
-                    color = Color.Gray,
+                    color = SwapColor.gray600,
                     modifier = Modifier.padding(top = 4.dp)
                 )
 
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 12.dp),
                     thickness = 1.dp,
-                    color = Color(0xFFE0E0E0)
+                    color = SwapColor.gray200,
                 )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "다음 갱신일",
                         style = SwapTypography.BodyMedium,
-                        color = Color.Gray
+                        color = SwapColor.gray600,
                     )
                     Text(
                         text = "2024.11.30",
                         style = SwapTypography.BodyMedium,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = SwapColor.gray600,
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            PaymentButton(
-                modifier = Modifier.weight(1f),
-                title = "결제 수단",
-                subtitle = "추가 수단 등록"
-            )
-            PaymentButton(
-                modifier = Modifier.weight(1f),
-                title = "결제 내역",
-                subtitle = "결제 내역 보기"
-            )
-        }
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 20.dp),
+//            horizontalArrangement = Arrangement.spacedBy(16.dp)
+//        ) {
+//            PaymentButton(
+//                modifier = Modifier.weight(1f),
+//                title = "결제 수단",
+//                subtitle = "추가 수단 등록"
+//            )
+//            PaymentButton(
+//                modifier = Modifier.weight(1f),
+//                title = "결제 내역",
+//                subtitle = "결제 내역 보기"
+//            )
+//        }
+        PaymentButton(
+            modifier = Modifier.weight(1f),
+            title = "결제 수단",
+            onClick = { },
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        PaymentButton(
+            modifier = Modifier.weight(1f),
+            title = "결제 내역",
+            onClick = { },
+        )
     }
 }
 
@@ -206,12 +226,13 @@ private fun BicycleCount(
         Text(
             text = title,
             style = SwapTypography.BodyMedium,
-            color = Color.Gray
+            color = SwapColor.gray600,
         )
         Text(
             text = count,
-            style = SwapTypography.TitleMedium,
-            modifier = Modifier.padding(top = 4.dp)
+            style = SwapTypography.BodyLarge,
+            modifier = Modifier.padding(top = 4.dp),
+            color = SwapColor.gray900,
         )
     }
 }
@@ -220,39 +241,35 @@ private fun BicycleCount(
 private fun PaymentButton(
     modifier: Modifier = Modifier,
     title: String,
-    subtitle: String
+    onClick: () -> Unit,
 ) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    style = SwapTypography.TitleMedium
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = "더보기",
-                    tint = Color.Gray
-                )
-            }
-            Text(
-                text = subtitle,
-                style = SwapTypography.BodyMedium,
-                color = Color.Gray,
-                modifier = Modifier.padding(top = 4.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .background(
+                shape = RoundedCornerShape(20.dp),
+                color = SwapColor.gray0
             )
-        }
+            .padding(
+                horizontal = 24.dp,
+                vertical = 12.dp,
+            )
+            .clickable(
+                onClick = onClick
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        SwapText(
+            text = title,
+            style = SwapTypography.BodyLarge,
+            color = SwapColor.gray900,
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = "더보기",
+            tint = SwapColor.gray300,
+        )
     }
 }
