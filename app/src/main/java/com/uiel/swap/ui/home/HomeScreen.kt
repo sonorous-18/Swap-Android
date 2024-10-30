@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
 import com.uiel.swap.design_system.SwapText
@@ -208,12 +211,14 @@ private fun Content(
             FilterButton(text = "가격대", onClick = {})
             FilterButton(text = "기기 스펙", onClick = {})
         }
-        VerticalGrid(
+        Column(
             modifier = Modifier
-                .padding(top = 28.dp)
-                .padding(horizontal = 18.dp),
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            for(i in 1..15) {
+            for (i in 1..15) {
                 Product(
                     title = "자이언트 에스케이프 디스크 2 하이브리드",
                     price = "월 15,000원 ~"
@@ -247,74 +252,58 @@ private fun Product(
 ) {
     Box(
         modifier = Modifier
-            .padding(6.dp)
-            .background(
-                shape = RoundedCornerShape(16.dp),
-                color = SwapColor.gray0,
-            )
-            .padding(16.dp),
-        contentAlignment = Alignment.TopCenter,
+            .fillMaxWidth()
+            .background(Color.Red)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SwapText(
-                text = title,
-                style = SwapTypography.BodyMedium,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            SwapText(
-                text = price,
-                style = SwapTypography.BodySmall,
-                color = SwapColor.gray600,
-            )
-            //Image(painter = painterResource(id = R.drawable.bi), contentDescription = )
-        }
-    }
-}
-
-@Composable
-fun VerticalGrid(
-    modifier: Modifier = Modifier,
-    columns: Int = 2,
-    content: @Composable () -> Unit
-) {
-    Layout(
-        content = content,
-        modifier = modifier
-    ) { measurables, constraints ->
-        val itemWidth = constraints.maxWidth / columns
-        // Keep given height constraints, but set an exact width
-        val itemConstraints = constraints.copy(
-            minWidth = itemWidth,
-            maxWidth = itemWidth
+        Image(
+            modifier = Modifier
+                .fillMaxWidth(),
+            painter = painterResource(id = R.drawable.ic_product_back),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
         )
-        // Measure each item with these constraints
-        val placeables = measurables.map { it.measure(itemConstraints) }
-        // Track each columns height so we can calculate the overall height
-        val columnHeights = Array(columns) { 0 }
-        placeables.forEachIndexed { index, placeable ->
-            val column = index % columns
-            columnHeights[column] += placeable.height
-        }
-        val height = (columnHeights.maxOrNull() ?: constraints.minHeight)
-            .coerceAtMost(constraints.maxHeight)
-        layout(
-            width = constraints.maxWidth,
-            height = height
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Cyan)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Track the Y co-ord per column we have placed up to
-            val columnY = Array(columns) { 0 }
-            placeables.forEachIndexed { index, placeable ->
-                val column = index % columns
-                placeable.placeRelative(
-                    x = column * itemWidth,
-                    y = columnY[column]
+            Column {
+                SwapText(
+                    modifier = Modifier.widthIn(max = 150.dp),
+                    text = title,
+                    style = SwapTypography.BodyMedium,
+                    color = Color.Black,
+                    maxLines = 2,
                 )
-                columnY[column] += placeable.height
+                Spacer(modifier = Modifier.height(4.dp))
+                SwapText(
+                    text = price,
+                    style = SwapTypography.BodySmall,
+                    color = SwapColor.gray600,
+                )
+                Row(
+                    modifier = Modifier.padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .background(
+                                shape = CircleShape,
+                                color = SwapColor.main700,
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .background(
+                                shape = CircleShape,
+                                color = SwapColor.gray450,
+                            )
+                    )
+                }
             }
         }
     }
