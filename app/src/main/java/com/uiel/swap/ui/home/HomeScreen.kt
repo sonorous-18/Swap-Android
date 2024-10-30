@@ -1,7 +1,9 @@
 package com.uiel.swap.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,11 +33,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
 import com.uiel.swap.design_system.SwapText
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.model.SubscribeProductListResponse
 import com.uiel.swap.ui.home.bottomsheet.FilterBottomSheet
 import com.uiel.swap.ui.home.bottomsheet.FilterType
 import com.uiel.swap.viewmodel.home.HomeViewModel
@@ -46,6 +51,12 @@ fun HomeScreen(
     var showFilterSheet by remember { mutableStateOf(false) }
     var currentFilterType by remember { mutableStateOf(FilterType.COLOR) }
     var selectedItems by remember { mutableStateOf(listOf<String>()) }
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getSub()
+    }
 
     Column(
         modifier = Modifier
@@ -68,7 +79,8 @@ fun HomeScreen(
                     onFilterButtonClick = { filterType ->
                         currentFilterType = filterType
                         showFilterSheet = true
-                    }
+                    },
+                    subList = uiState.sub,
                 )
             }
         }
@@ -156,7 +168,8 @@ private fun Banner(
 @Composable
 private fun Content(
     modifier: Modifier = Modifier,
-    onFilterButtonClick: (FilterType) -> Unit
+    onFilterButtonClick: (FilterType) -> Unit,
+    subList: List<SubscribeProductListResponse>,
 ) {
     Column(
         modifier = Modifier
@@ -241,10 +254,12 @@ private fun Content(
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            for (i in 1..15) {
+            subList.forEach {
                 Product(
-                    title = "자이언트 에스케이프 디스크 2 하이브리드",
-                    price = "월 15,000원 ~"
+                    title = it.title,
+                    price = "월 ${it.price}원 ~",
+                    img = it.thumbnail,
+                    colors = it.colors,
                 )
             }
         }
@@ -272,38 +287,40 @@ private fun Product(
     modifier: Modifier = Modifier,
     title: String,
     price: String,
+    img: String,
+    colors: List<com.uiel.swap.model.Color>,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
+            //.background(Color.White)
     ) {
-        Box(
+
+        Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp)
-                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                .background(SwapColor.background)
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp),
-                painter = painterResource(id = R.drawable.ic_product_back),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-            )
-        }
+                .height(160.dp),
+            painter = painterResource(id = R.drawable.ic_product_back),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+        )
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxSize()
+                .padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    bottom = 16.dp,
+                ),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+            ) {
                 SwapText(
                     modifier = Modifier.widthIn(max = 180.dp),
                     text = title,
@@ -318,35 +335,53 @@ private fun Product(
                     color = SwapColor.gray600,
                 )
                 Row(
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 40.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .background(
-                                shape = CircleShape,
-                                color = SwapColor.main700,
+                    colors.forEach {
+                        val color = when(it) {
+                            com.uiel.swap.model.Color.CREAM -> Color(0xFFF3F0E5)
+                            com.uiel.swap.model.Color.PINK -> Color(0xFFF08CB0)
+                            com.uiel.swap.model.Color.SILVER -> Color(0xFFC3C3C3)
+                            com.uiel.swap.model.Color.BLACK -> Color(0xFF383838)
+                            com.uiel.swap.model.Color.RED -> Color(0xFFDE5151)
+                            com.uiel.swap.model.Color.GREEN -> Color(0xFF5D8F63)
+                            com.uiel.swap.model.Color.BLUE -> Color(0xFF6C85DA)
+                            com.uiel.swap.model.Color.GREY -> Color(0xFF737373)
+                            com.uiel.swap.model.Color.PURPLE -> Color(0xFFA475DF)
+                            com.uiel.swap.model.Color.BEIGE -> Color(0xFFFAE7BC)
+                            com.uiel.swap.model.Color.SKY_BLUE -> Color(0xFF6CB1DF)
+                            com.uiel.swap.model.Color.WHITE -> Color(0xFFFFFFFF)
+                        }
+                        if(it == com.uiel.swap.model.Color.WHITE) {
+                            Box(
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .border(1.dp, Color(0xFFE2E2E2), CircleShape)
+                                    .background(
+                                        shape = CircleShape,
+                                        color = color,
+                                    )
                             )
-                    )
-                    Box(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .background(
-                                shape = CircleShape,
-                                color = SwapColor.gray450,
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .background(
+                                        shape = CircleShape,
+                                        color = color,
+                                    )
                             )
-                    )
+                        }
+                    }
                 }
             }
-
-            Image(
+            Spacer(modifier = Modifier.weight(1f))
+            AsyncImage(
                 modifier = Modifier
-                    .size(100.dp)
-                    .padding(start = 16.dp),
-                painter = painterResource(id = R.drawable.img_kickboard),
+                    .size(140.dp),
+                model = img,
                 contentDescription = null,
-                contentScale = ContentScale.Fit
             )
         }
     }
