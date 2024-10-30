@@ -49,7 +49,7 @@ fun MyPageScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -98,7 +98,7 @@ fun MyPageScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(20.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -200,6 +200,12 @@ fun MyPageScreen() {
         PaymentButton(
             modifier = Modifier.weight(1f),
             title = "결제 내역",
+            onClick = { },
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        PaymentButton(
+            modifier = Modifier.weight(1f),
+            title = "내 정보 관리",
             onClick = { },
         )
     }
