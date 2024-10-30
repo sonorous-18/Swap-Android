@@ -247,6 +247,7 @@ private fun Content(
                     price = "월 15,000원 ~"
                 )
             }
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
