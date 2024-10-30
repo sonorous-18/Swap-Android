@@ -60,7 +60,7 @@ fun MyPageScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "내 자전거 등록",
+                        text = "내 자전거 관리",
                         style = SwapTypography.HeadlineSmall.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
