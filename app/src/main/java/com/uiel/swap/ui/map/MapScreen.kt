@@ -42,9 +42,9 @@ import com.uiel.swap.design_system.button.SwapColoredButton
 fun MapScreen(
     viewModel: MapViewModel = viewModel()
 ) {
-    val singapore = LatLng(1.35, 103.87)
+    val singapore = LatLng(36.353092, 127.344656)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(singapore, 10f)
+        position = CameraPosition.fromLatLngZoom(singapore, 16f)
     }
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -54,11 +54,11 @@ fun MapScreen(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
-            Marker(
-                state = MarkerState(position = singapore),
-                title = "Singapore",
-                snippet = "Marker in Singapore"
-            )
+//            Marker(
+//                state = MarkerState(position = singapore),
+//                title = "Singapore",
+//                snippet = "Marker in Singapore"
+//            )
         }
         Subscribe()
         SmartControl(
