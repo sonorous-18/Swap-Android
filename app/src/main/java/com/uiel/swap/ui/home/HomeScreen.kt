@@ -1,8 +1,8 @@
 package com.uiel.swap.ui.home
 
-import android.widget.GridLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,20 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +34,6 @@ import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapIcon
 import com.uiel.swap.design_system.SwapText
 import com.uiel.swap.design_system.SwapTypography
-import com.uiel.swap.design_system.clickable
 import com.uiel.swap.viewmodel.home.HomeViewModel
 
 @Composable
@@ -66,7 +57,6 @@ fun HomeScreen(
                     .fillMaxSize()
                     .background(SwapColor.main500)
             ) {
-
                 Content()
             }
         }
@@ -80,10 +70,7 @@ private fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = 24.dp,
-                vertical = 20.dp,
-            ),
+            .padding(horizontal = 24.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -93,7 +80,7 @@ private fun TopBar(
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
             onClick = { /*TODO*/ },
-            colors = IconButtonColors(
+            colors = IconButtonDefaults.iconButtonColors(
                 containerColor = SwapColor.main500,
                 contentColor = SwapColor.gray0,
                 disabledContentColor = SwapColor.main500,
@@ -115,22 +102,13 @@ private fun Banner(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                )
-            )
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(SwapColor.main500),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Column(
             modifier = Modifier
-                .padding(
-                    start = 24.dp,
-                    top = 24.dp,
-                    bottom = 24.dp,
-                ),
+                .padding(start = 24.dp, top = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             SwapText(
@@ -146,11 +124,7 @@ private fun Banner(
         }
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            modifier = Modifier.padding(
-                top = 12.dp,
-                end = 8.dp,
-                bottom = 14.dp,
-            ),
+            modifier = Modifier.padding(top = 12.dp, end = 8.dp, bottom = 14.dp),
             painter = painterResource(id = SwapIcon.Character),
             contentDescription = null,
         )
@@ -164,16 +138,12 @@ private fun Content(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(
-                RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                )
-            )
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(SwapColor.background),
     ) {
-        val bike = listOf("전체", "어반바이크", "킥스쿠터", "브랜드 콜라보", "자토바이", "로드바이크", "카고바이크")
-        val focus = remember { mutableIntStateOf(0) }
+        val bikeCategories = listOf("전체", "어반바이크", "킥스쿠터", "브랜드 콜라보", "자토바이", "로드바이크", "카고바이크")
+        val selectedCategory = remember { mutableStateOf(0) }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -182,21 +152,19 @@ private fun Content(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             Spacer(modifier = Modifier.width(8.dp))
-            bike.forEachIndexed { index, s ->
+            bikeCategories.forEachIndexed { index, category ->
                 Column(
-                    modifier = Modifier.clickable(
-                        onClick = { focus.intValue = index }
-                    ),
+                    modifier = Modifier.clickable(onClick = { selectedCategory.value = index }),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     SwapText(
-                        text = s,
-                        style = if (focus.intValue == index) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
-                        color = if (focus.intValue == index) Color.Black else SwapColor.gray600
+                        text = category,
+                        style = if (selectedCategory.value == index) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
+                        color = if (selectedCategory.value == index) Color.Black else SwapColor.gray600
                     )
-                    if (focus.intValue == index) {
+                    if (selectedCategory.value == index) {
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
@@ -219,19 +187,9 @@ private fun Content(
         ) {
             Row(
                 modifier = Modifier
-                    .background(
-                        shape = RoundedCornerShape(50.dp),
-                        color = Color.White,
-                    )
-                    .padding(
-                        start = 12.dp,
-                        top = 4.dp,
-                        bottom = 4.dp,
-                        end = 8.dp,
-                    )
-                    .clickable(
-                        onClick = { }
-                    ),
+                    .background(Color.White, RoundedCornerShape(50.dp))
+                    .padding(start = 12.dp, top = 4.dp, bottom = 4.dp, end = 8.dp)
+                    .clickable(onClick = {}),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -246,18 +204,9 @@ private fun Content(
                     contentDescription = null,
                 )
             }
-            FilterButton(
-                text = "컬러",
-                onClick = { },
-            )
-            FilterButton(
-                text = "가격대",
-                onClick = { },
-            )
-            FilterButton(
-                text = "기기 스펙",
-                onClick = { },
-            )
+            FilterButton(text = "컬러", onClick = {})
+            FilterButton(text = "가격대", onClick = {})
+            FilterButton(text = "기기 스펙", onClick = {})
         }
         VerticalGrid(
             modifier = Modifier
@@ -276,23 +225,14 @@ private fun Content(
 
 @Composable
 private fun FilterButton(
-    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
 ) {
     SwapText(
         modifier = Modifier
-            .background(
-                shape = RoundedCornerShape(50.dp),
-                color = Color.White,
-            )
-            .padding(
-                horizontal = 12.dp,
-                vertical = 6.dp,
-            )
-            .clickable(
-                onClick = onClick,
-            ),
+            .background(Color.White, RoundedCornerShape(50.dp))
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .clickable(onClick = onClick),
         text = text,
         style = SwapTypography.BodyMedium,
         color = SwapColor.gray800,

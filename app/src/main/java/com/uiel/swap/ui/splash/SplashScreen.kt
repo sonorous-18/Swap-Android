@@ -22,7 +22,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(onTimeout: () -> Unit) {
     LaunchedEffect(true) {
-        delay(2000)
+        delay(1000)
         onTimeout()
     }
 
@@ -44,7 +44,7 @@ fun SplashScreen(onTimeout: () -> Unit) {
             )
 
             Image(
-                painter = painterResource(id = R.drawable.splash_swap_logo),
+                painter = painterResource(id = R.drawable.splash_swap_character),
                 contentDescription = "splash swap logo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
