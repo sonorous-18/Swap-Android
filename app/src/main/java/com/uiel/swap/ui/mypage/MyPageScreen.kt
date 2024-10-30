@@ -60,7 +60,7 @@ fun MyPageScreen() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "내 자전거 등록",
+                        text = "내 자전거 관리",
                         style = SwapTypography.HeadlineSmall.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
@@ -200,6 +200,12 @@ fun MyPageScreen() {
         PaymentButton(
             modifier = Modifier.weight(1f),
             title = "결제 내역",
+            onClick = { },
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        PaymentButton(
+            modifier = Modifier.weight(1f),
+            title = "내 정보 관리",
             onClick = { },
         )
     }
