@@ -27,9 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uiel.swap.R
@@ -251,27 +249,38 @@ private fun Product(
     price: String,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .background(Color.Red)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
     ) {
-        Image(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.ic_product_back),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-        )
+                .fillMaxWidth()
+                .height(160.dp)
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .background(SwapColor.background)
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp),
+                painter = painterResource(id = R.drawable.ic_product_back),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        }
+
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Cyan)
+                .fillMaxWidth()
                 .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 SwapText(
-                    modifier = Modifier.widthIn(max = 150.dp),
+                    modifier = Modifier.widthIn(max = 180.dp),
                     text = title,
                     style = SwapTypography.BodyMedium,
                     color = Color.Black,
@@ -305,6 +314,15 @@ private fun Product(
                     )
                 }
             }
+
+            Image(
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(start = 16.dp),
+                painter = painterResource(id = R.drawable.img_kickboard),
+                contentDescription = null,
+                contentScale = ContentScale.Fit
+            )
         }
     }
 }
