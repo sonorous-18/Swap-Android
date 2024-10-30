@@ -76,4 +76,6 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.ui)
     implementation(libs.ui.tooling)
+
+    implementation("com.google.maps.android:maps-compose:4.4.1")
 }
