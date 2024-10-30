@@ -3,6 +3,7 @@ package com.uiel.swap.ui.benefit
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.design_system.clickable
 
 @Composable
 fun BenefitScreen(
@@ -31,7 +33,7 @@ fun BenefitScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFAFAFA))
+            .background(SwapColor.background)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -51,12 +53,14 @@ private fun PointsSection() {
     ) {
         Text(
             text = "지금까지 받은 포인트",
-            style = SwapTypography.BodyLarge.copy(color = SwapColor.gray600)
+            style = SwapTypography.BodyLarge,
+            color = SwapColor.gray600,
         )
         Text(
             text = "1,200 P",
             style = SwapTypography.DisplaySmall,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
+            color = SwapColor.gray900,
         )
         Box(
             modifier = Modifier
@@ -82,7 +86,7 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
             .padding(vertical = 16.dp)
             .height(48.dp)
             .clip(RoundedCornerShape(24.dp))
-            .background(Color(0xFFF5F5F5))
+            .background(SwapColor.gray0)
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
             Box(
@@ -92,14 +96,19 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
                     .background(
                         if (selectedTabIndex == 0) SwapColor.main500 else Color.Transparent
                     )
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = { selectedTabIndex = 0 }
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "서비스 포인트",
-                    color = if (selectedTabIndex == 0) Color.White else Color.DarkGray,
-                    style = SwapTypography.TitleMedium,
-                    modifier = Modifier.clickable { selectedTabIndex = 0 }
+                    color = if (selectedTabIndex == 0) Color.White else SwapColor.gray600,
+                    style = if (selectedTabIndex == 0) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
+                    modifier = Modifier
                 )
             }
 
@@ -110,17 +119,22 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
                     .background(
                         if (selectedTabIndex == 1) SwapColor.main500 else Color.Transparent
                     )
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {
+                            selectedTabIndex = 1
+                            onExternalPointClick()
+                        }
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "외부 포인트",
-                    color = if (selectedTabIndex == 1) Color.White else Color.DarkGray,
-                    style = SwapTypography.TitleMedium,
-                    modifier = Modifier.clickable {
-                        selectedTabIndex = 1
-                        onExternalPointClick()
-                    }
+                    color = if (selectedTabIndex == 1) Color.White else SwapColor.gray600,
+                    style = if (selectedTabIndex == 1) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
+
                 )
             }
         }
@@ -139,13 +153,13 @@ private fun CircularProgressIndicator(
                 val diameter = size.width
 
                 drawCircle(
-                    color = Color(0xFFF5F5F5),
+                    color = SwapColor.gray200,
                     radius = diameter / 2,
                     style = Stroke(strokeWidth)
                 )
 
                 drawArc(
-                    color = SwapColor.gray600,
+                    color = SwapColor.main500,
                     startAngle = -90f,
                     sweepAngle = 360 * percentage,
                     useCenter = false,
@@ -183,7 +197,7 @@ private fun MissionList() {
                 )
                 Text(
                     text = "완료된 미션",
-                    style = SwapTypography.BodyMedium.copy(color = SwapColor.gray450)
+                    style = SwapTypography.TitleMedium.copy(color = SwapColor.gray450)
                 )
                 HorizontalDivider(
                     modifier = Modifier
@@ -229,7 +243,8 @@ private fun MissionItem(
                 )
                 Text(
                     text = progress.toString(),
-                    style = SwapTypography.TitleSmall
+                    style = SwapTypography.TitleSmall,
+                    color = SwapColor.gray900,
                 )
             }
 
@@ -240,7 +255,8 @@ private fun MissionItem(
             ) {
                 Text(
                     text = "기기로 3km 이동하기",
-                    style = SwapTypography.TitleMedium
+                    style = SwapTypography.TitleMedium,
+                    color = Color.Black,
                 )
                 Text(
                     text = "100 P",
@@ -281,7 +297,8 @@ private fun CompletedMissionItem() {
             ) {
                 Text(
                     text = "기기로 3km 이동하기",
-                    style = SwapTypography.TitleMedium
+                    style = SwapTypography.TitleMedium,
+                    color = Color.Black,
                 )
                 Text(
                     text = "100 P 획득 완료",
