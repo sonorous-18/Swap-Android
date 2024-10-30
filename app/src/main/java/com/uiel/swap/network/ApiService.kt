@@ -4,8 +4,8 @@ import com.uiel.swap.model.BikeListResponse
 import com.uiel.swap.model.BuyProductListResponse
 import com.uiel.swap.model.BuyProductRequest
 import com.uiel.swap.model.ChallengeListResponse
-import com.uiel.swap.model.FilterRequest
-import com.uiel.swap.model.FilterResponse
+import com.uiel.swap.model.Color
+import com.uiel.swap.model.Emphysema
 import com.uiel.swap.model.ReviewResponse
 import com.uiel.swap.model.SaveBikeRequest
 import com.uiel.swap.model.SubscribeDetailResponse
@@ -14,10 +14,16 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @GET("sub/list")
-    suspend fun subscribeProductList(): List<SubscribeProductListResponse>
+    suspend fun subscribeProductList(
+        @Query("colors") colors: String?,
+        @Query("startMoney") startMoney: Int?,
+        @Query("endMoney") endMoney: Int?,
+        @Query("spaces") spaces: String?,
+    ): List<SubscribeProductListResponse>
 
     @GET("sub/detail/{id}")
     suspend fun subscribeDetail(
@@ -47,9 +53,4 @@ interface ApiService {
     suspend fun review(
         @Path("id") id: Long,
     ): List<ReviewResponse>
-
-    @POST("sub/filter")
-    suspend fun filter(
-        @Body filterRequest: FilterRequest
-    ): List<FilterResponse>
 }

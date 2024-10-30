@@ -21,6 +21,7 @@ import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
 import com.uiel.swap.design_system.button.SwapOutlineButton
 import com.uiel.swap.design_system.button.SwapTextButton
+import com.uiel.swap.viewmodel.home.HomeViewModel
 
 enum class FilterType {
     COLOR, PRICE, SPEC
@@ -54,7 +55,8 @@ fun FilterBottomSheet(
     selectedItems: List<String>,
     onItemSelected: (String) -> Unit,
     onItemDeselected: (String) -> Unit,
-    itemCount: Int = 123
+    itemCount: Int = 123,
+    viewModel: HomeViewModel,
 ) {
     val colorOptions = listOf(
         FilterOption.ColorOption("Cream", Color(0xFFFFFBF0)),
@@ -128,6 +130,7 @@ fun FilterBottomSheet(
                                         } else {
                                             onItemSelected(option.name)
                                         }
+                                        //viewModel.updateColors(option.name)
                                     }
                                 )
                             }
@@ -366,20 +369,3 @@ private fun ColorOptionButton(
 //        )
 //    }
 //}
-
-@Preview(showBackground = true)
-@Composable
-fun FilterBottomSheetPreview() {
-    var currentType by remember { mutableStateOf(FilterType.COLOR) }
-    var selectedItems by remember { mutableStateOf(listOf<String>()) }
-
-    FilterBottomSheet(
-        showSheet = true,
-        currentType = currentType,
-        onTypeChange = { currentType = it },
-        onDismiss = {},
-        selectedItems = selectedItems,
-        onItemSelected = { selectedItems = selectedItems + it },
-        onItemDeselected = { selectedItems = selectedItems - it }
-    )
-}
