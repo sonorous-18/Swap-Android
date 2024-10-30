@@ -69,5 +69,4 @@ data class HomeUiState(
     val startMoney: Int?,
     val endMoney: Int?,
     val spaces: List<Emphysema>?,
-
 )
