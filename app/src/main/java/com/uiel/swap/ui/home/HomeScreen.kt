@@ -3,11 +3,11 @@ package com.uiel.swap.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -167,16 +169,21 @@ private fun Content(
     ) {
         val bikeCategories = listOf("전체", "어반바이크", "킥스쿠터", "브랜드 콜라보", "자토바이", "로드바이크", "카고바이크")
         val selectedCategory = remember { mutableStateOf(0) }
+        val listState = rememberLazyListState()
 
-        Row(
+        LaunchedEffect(selectedCategory.value) {
+            listState.animateScrollToItem(selectedCategory.value)
+        }
+
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
-                .horizontalScroll(rememberScrollState()),
+                .padding(top = 16.dp),
+            state = listState,
+            contentPadding = PaddingValues(horizontal = 24.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Spacer(modifier = Modifier.width(8.dp))
-            bikeCategories.forEachIndexed { index, category ->
+            items(bikeCategories.size) { index ->
                 Column(
                     modifier = Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -188,7 +195,7 @@ private fun Content(
                 ) {
                     Spacer(modifier = Modifier.height(8.dp))
                     SwapText(
-                        text = category,
+                        text = bikeCategories[index],
                         style = if (selectedCategory.value == index) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
                         color = if (selectedCategory.value == index) Color.Black else SwapColor.gray600
                     )
@@ -203,7 +210,6 @@ private fun Content(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
         }
 
         Row(
@@ -266,7 +272,11 @@ private fun FilterButton(
         modifier = Modifier
             .background(Color.White, RoundedCornerShape(50.dp))
             .padding(horizontal = 12.dp, vertical = 6.dp)
-            .clickable(onClick = onClick),
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ),
         text = text,
         style = SwapTypography.BodyMedium,
         color = SwapColor.gray800,
