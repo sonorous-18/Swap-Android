@@ -89,11 +89,14 @@ fun HomeScreen(
     FilterBottomSheet(
         showSheet = showFilterSheet,
         currentType = currentFilterType,
-        onTypeChange = { currentFilterType = it },
+        onTypeChange = {
+            currentFilterType = it
+        },
         onDismiss = { showFilterSheet = false },
         selectedItems = selectedItems,
         onItemSelected = { selectedItems = selectedItems + it },
-        onItemDeselected = { selectedItems = selectedItems - it }
+        onItemDeselected = { selectedItems = selectedItems - it },
+        viewModel = viewModel,
     )
 }
 
@@ -252,7 +255,7 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            //verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             subList.forEach {
                 Product(
@@ -293,14 +296,14 @@ private fun Product(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .height(150.dp)
             .clip(RoundedCornerShape(12.dp))
-            //.background(Color.White)
     ) {
 
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(160.dp),
+                .height(150.dp),
             painter = painterResource(id = R.drawable.ic_product_back),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
@@ -319,7 +322,7 @@ private fun Product(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()
+                //.fillMaxHeight()
             ) {
                 SwapText(
                     modifier = Modifier.widthIn(max = 180.dp),
@@ -339,7 +342,7 @@ private fun Product(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     colors.forEach {
-                        val color = when(it) {
+                        val color = when (it) {
                             com.uiel.swap.model.Color.CREAM -> Color(0xFFF3F0E5)
                             com.uiel.swap.model.Color.PINK -> Color(0xFFF08CB0)
                             com.uiel.swap.model.Color.SILVER -> Color(0xFFC3C3C3)
@@ -353,7 +356,7 @@ private fun Product(
                             com.uiel.swap.model.Color.SKY_BLUE -> Color(0xFF6CB1DF)
                             com.uiel.swap.model.Color.WHITE -> Color(0xFFFFFFFF)
                         }
-                        if(it == com.uiel.swap.model.Color.WHITE) {
+                        if (it == com.uiel.swap.model.Color.WHITE) {
                             Box(
                                 modifier = Modifier
                                     .size(16.dp)
