@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,13 +24,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
-import com.uiel.swap.design_system.clickable
+import com.uiel.swap.model.ChallengeListResponse
 
 @Composable
 fun BenefitScreen(
     viewModel: BenefitViewModel = viewModel(),
     onExternalPointClick: () -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getChallenge()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +48,9 @@ fun BenefitScreen(
 
         TabSection(onExternalPointClick)
 
-        MissionList()
+        MissionList(
+            challenge = uiState.challenge
+        )
     }
 }
 
@@ -135,7 +144,7 @@ private fun TabSection(onExternalPointClick: () -> Unit) {
                     color = if (selectedTabIndex == 1) Color.White else SwapColor.gray600,
                     style = if (selectedTabIndex == 1) SwapTypography.TitleMedium else SwapTypography.BodyLarge,
 
-                )
+                    )
             }
         }
     }
@@ -161,7 +170,7 @@ private fun CircularProgressIndicator(
                 drawArc(
                     color = SwapColor.main500,
                     startAngle = -90f,
-                    sweepAngle = 360 * percentage,
+                    sweepAngle = (percentage * 3.6).toFloat(),
                     useCenter = false,
                     style = Stroke(strokeWidth, cap = StrokeCap.Round)
                 )
@@ -170,15 +179,19 @@ private fun CircularProgressIndicator(
 }
 
 @Composable
-private fun MissionList() {
+private fun MissionList(
+    challenge: List<ChallengeListResponse>,
+) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(5) {
+        items(challenge.filter { !it.isClear }) {
             MissionItem(
-                isCompleted = false,
-                progress = 75
+                title = it.title,
+                point = it.point,
+                percentage = it.percentage,
+                isCompleted = it.isClear,
             )
         }
 
@@ -208,16 +221,21 @@ private fun MissionList() {
             }
         }
 
-        items(2) {
-            CompletedMissionItem()
+        items(challenge.filter { it.isClear }) {
+            CompletedMissionItem(
+                title = it.title,
+                point = it.point,
+            )
         }
     }
 }
 
 @Composable
 private fun MissionItem(
+    title: String,
+    point: Int,
     isCompleted: Boolean = false,
-    progress: Int
+    percentage: Int
 ) {
     Card(
         modifier = Modifier
@@ -238,11 +256,11 @@ private fun MissionItem(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    percentage = progress / 100f,
+                    percentage = percentage.toFloat(),
                     modifier = Modifier.fillMaxSize()
                 )
                 Text(
-                    text = progress.toString(),
+                    text = percentage.toString(),
                     style = SwapTypography.TitleSmall,
                     color = SwapColor.gray900,
                 )
@@ -254,12 +272,12 @@ private fun MissionItem(
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "기기로 3km 이동하기",
+                    text = title,
                     style = SwapTypography.TitleMedium,
                     color = Color.Black,
                 )
                 Text(
-                    text = "100 P",
+                    text = "$point P",
                     style = SwapTypography.BodyMedium.copy(
                         color = SwapColor.gray450
                     )
@@ -270,7 +288,10 @@ private fun MissionItem(
 }
 
 @Composable
-private fun CompletedMissionItem() {
+private fun CompletedMissionItem(
+    title: String,
+    point: Int,
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -296,12 +317,12 @@ private fun CompletedMissionItem() {
                     .padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = "기기로 3km 이동하기",
+                    text = title,
                     style = SwapTypography.TitleMedium,
                     color = Color.Black,
                 )
                 Text(
-                    text = "100 P 획득 완료",
+                    text = "$point P 획득 완료",
                     style = SwapTypography.BodyMedium.copy(
                         color = SwapColor.gray450
                     )
