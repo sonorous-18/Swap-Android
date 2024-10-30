@@ -172,16 +172,24 @@ fun SubscribeDetailScreen(
                         .padding(bottom = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    repeat(2) {
+                    uiState.reviews.forEach { review ->
                         Column(
                             modifier = Modifier
                                 .width(200.dp)
                                 .border(1.dp, SwapColor.gray300, RoundedCornerShape(12.dp))
                                 .padding(12.dp)
                         ) {
-                            Text(text = "홍길동", style = SwapTypography.BodyLarge, color = SwapColor.gray800)
+                            Text(
+                                text = review.username,
+                                style = SwapTypography.BodyLarge,
+                                color = SwapColor.gray800
+                            )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = "리뷰 예시 내용입니다.", style = SwapTypography.BodyMedium, color = SwapColor.gray600)
+                            Text(
+                                text = review.comment,
+                                style = SwapTypography.BodyMedium,
+                                color = SwapColor.gray600
+                            )
                         }
                     }
                 }
