@@ -61,9 +61,16 @@ fun MapScreen(
 //            )
         }
         Subscribe()
-        SmartControl(
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(24.dp),
+            painter = painterResource(id = R.drawable.b),
+            contentDescription = null)
+//        SmartControl(
+//            modifier = Modifier.align(Alignment.BottomCenter)
+//        )
     }
 }
 

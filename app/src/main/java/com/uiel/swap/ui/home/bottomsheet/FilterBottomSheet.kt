@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
+import com.uiel.swap.design_system.button.SwapColoredButton
 import com.uiel.swap.design_system.button.SwapOutlineButton
 import com.uiel.swap.design_system.button.SwapTextButton
 import com.uiel.swap.viewmodel.home.HomeViewModel
@@ -88,6 +89,9 @@ fun FilterBottomSheet(
 
     if (showSheet) {
         ModalBottomSheet(
+            sheetState = rememberModalBottomSheetState(
+                skipPartiallyExpanded = true
+            ),
             onDismissRequest = onDismiss,
             containerColor = Color.White,
         ) {
@@ -212,8 +216,8 @@ fun FilterBottomSheet(
                         enabled = true,
                         keyboardInteractionEnabled = true
                     )
-                    SwapTextButton(
-                        text = "${itemCount}개 상품 보기",
+                    SwapColoredButton(
+                        text = "상품 보기",
                         onClick = { selectedItems.forEach { onItemDeselected(it) } },
                         modifier = Modifier.weight(1f),
                         small = false,

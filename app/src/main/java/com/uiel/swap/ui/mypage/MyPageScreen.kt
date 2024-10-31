@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapText
@@ -24,7 +25,9 @@ import com.uiel.swap.design_system.SwapTypography
 import com.uiel.swap.design_system.clickable
 
 @Composable
-fun MyPageScreen() {
+fun MyPageScreen(
+    navController: NavController,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +50,10 @@ fun MyPageScreen() {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp)
+                .clickable(
+                    onClick = { navController.navigate("management")},
+                ),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             shape = RoundedCornerShape(20.dp)
         ) {
@@ -96,6 +102,9 @@ fun MyPageScreen() {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable(
+                    onClick = { navController.navigate("subscribeManagement")}
+                )
                 .padding(horizontal = 20.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             shape = RoundedCornerShape(20.dp)
