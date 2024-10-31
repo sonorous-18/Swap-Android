@@ -1,6 +1,6 @@
 package com.uiel.swap.ui.subscribe
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,29 +20,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
 import com.uiel.swap.design_system.button.SwapColoredButton
 import com.uiel.swap.viewmodel.subscribe.SubscribeDetailViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import coil3.ImageLoader
+import coil3.compose.AsyncImage
+import kotlinx.coroutines.delay
 
 @Composable
 fun SubscribeDetailScreen(
     subscribeId: Long,
     viewModel: SubscribeDetailViewModel = viewModel(),
+    navController: NavController,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val selectedColor = remember { mutableStateOf(uiState.detail?.colors?.firstOrNull()) }
 
     LaunchedEffect(Unit) {
         viewModel.getSubscribeDetail(subscribeId)
+        Log.d("TEST1", uiState.detail?.colors?.firstOrNull().toString())
     }
 
-    val selectedColor = remember { mutableStateOf(uiState.detail?.colors?.firstOrNull()) }
+    LaunchedEffect(Unit) {
+        delay(100)
+        selectedColor.value = uiState.detail?.colors?.firstOrNull()
+    }
 
     Box(
         modifier = Modifier
+            .statusBarsPadding()
             .fillMaxSize()
             .background(SwapColor.gray0)
     ) {
@@ -58,7 +70,7 @@ fun SubscribeDetailScreen(
                     .padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { /* 뒤로가기 버튼 */ }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = null,
@@ -75,11 +87,16 @@ fun SubscribeDetailScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(340.dp)
                     .background(SwapColor.gray200)
             ) {
                 val thumbnailUrl = selectedColor.value?.thumbnail ?: ""
-                ThumbnailImage(thumbnailUrl)
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    model = thumbnailUrl,
+                    contentDescription = null,
+                )
 
                 Box(
                     modifier = Modifier
@@ -193,6 +210,13 @@ fun SubscribeDetailScreen(
                         }
                     }
                 }
+                AsyncImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    model = uiState.detail?.detailLink,
+                    contentDescription = null,
+                    imageLoader = ImageLoader(LocalContext.current),
+                    contentScale = ContentScale.FillWidth,
+                )
             }
         }
 
@@ -205,17 +229,6 @@ fun SubscribeDetailScreen(
             text = "이용하기",
             onClick = {},
             small = false,
-        )
-    }
-}
-
-@Composable
-fun ThumbnailImage(thumbnailUrl: String) {
-    if (thumbnailUrl.isNotEmpty()) {
-        Image(
-            painter = rememberImagePainter(thumbnailUrl),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize()
         )
     }
 }

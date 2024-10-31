@@ -25,6 +25,7 @@ import com.uiel.swap.R
 import com.uiel.swap.design_system.SwapColor
 import com.uiel.swap.design_system.SwapTypography
 import com.uiel.swap.model.ChallengeListResponse
+import kotlinx.coroutines.delay
 
 @Composable
 fun BenefitScreen(
@@ -60,13 +61,23 @@ private fun PointsSection() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(vertical = 16.dp)
     ) {
+        var animatedNumber by remember { mutableStateOf(0) }
+
+        // 애니메이션 시작
+        LaunchedEffect(Unit) {
+            for (i in 100..200) {
+                animatedNumber = i
+                delay(10) // 속도 조절 (30ms 대기)
+            }
+        }
+
         Text(
             text = "지금까지 받은 포인트",
             style = SwapTypography.BodyLarge,
             color = SwapColor.gray600,
         )
         Text(
-            text = "1,200 P",
+            text = "$animatedNumber P",
             style = SwapTypography.DisplaySmall,
             modifier = Modifier.padding(vertical = 8.dp),
             color = SwapColor.gray900,

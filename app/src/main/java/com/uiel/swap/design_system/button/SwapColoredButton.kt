@@ -23,6 +23,7 @@ fun SwapColoredButton(
     text: String,
     small: Boolean = true,
     enabled: Boolean = true,
+    shape: RoundedCornerShape = RoundedCornerShape(8.dp),
     keyboardInteractionEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
@@ -52,7 +53,7 @@ fun SwapColoredButton(
     BasicButton(
         modifier = modifier,
         backgroundColor = background,
-        shape = RoundedCornerShape(8.dp),
+        shape = shape,
         enabled = enabled,
         keyboardInteractionEnabled = keyboardInteractionEnabled,
         onPressed = { pressed = !pressed },

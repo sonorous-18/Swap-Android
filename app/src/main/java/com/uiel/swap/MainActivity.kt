@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import com.uiel.swap.ui.main.MainScreen
 import com.uiel.swap.ui.theme.SwapTheme
-import android.os.Handler
-import android.widget.Toast
+import com.uiel.swap.ui.SwapApp
 
 class MainActivity : ComponentActivity() {
 //    private var doubleBackToExitPressedOnce = false
@@ -19,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SwapTheme {
-                MainScreen()
+                SwapApp()
             }
         }
     }
