@@ -13,13 +13,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.uiel.swap.ui.BottomNavItem
-import com.uiel.swap.ui.RootScreen
 import com.uiel.swap.ui.SwapBottomNavigation
 import com.uiel.swap.ui.benefit.BenefitScreen
 import com.uiel.swap.ui.home.HomeScreen
 import com.uiel.swap.ui.map.MapScreen
 import com.uiel.swap.ui.mypage.MyPageScreen
-import com.uiel.swap.ui.subscribe.SubscribeDetailScreen
 import com.uiel.swap.viewmodel.main.MainViewModel
 
 @Composable
